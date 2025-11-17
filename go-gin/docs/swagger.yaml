@@ -1,0 +1,99 @@
+definitions:
+  controller.CreatePostRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  models.Post:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    type: object
+  models.Response:
+    properties:
+      data: {}
+      error:
+        example: ""
+        type: string
+      message:
+        example: 操作成功
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      state:
+        type: integer
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /post/createPost:
+    post:
+      consumes:
+      - application/json
+      description: 创建新的文章
+      parameters:
+      - description: 文章信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Post'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Response'
+      security:
+      - BearerAuth: []
+      summary: 创建文章
+      tags:
+      - 文章管理
+swagger: "2.0"
